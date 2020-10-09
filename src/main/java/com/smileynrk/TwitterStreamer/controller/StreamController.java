@@ -40,7 +40,7 @@ public class StreamController {
 	RuleManagerService rms;
 
 	@GetMapping(value = "/getTweets", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	@CrossOrigin(origins ="http://localhost:3000")
+	@CrossOrigin(origins ="https://reactivetwitter.netlify.app/")
 	Flux<String> getTweets() {
 		LOGGER.info("New Req for Streaming");
 		return twRepo.saveAll(tStream).map(tweet -> {
