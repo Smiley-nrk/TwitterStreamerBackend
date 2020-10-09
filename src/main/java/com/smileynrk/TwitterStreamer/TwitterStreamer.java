@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 @Configuration
 public class TwitterStreamer {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterStreamer.class);
 
 	@Autowired
@@ -33,12 +33,16 @@ public class TwitterStreamer {
 	@Bean("TweetStream")
 	Flux<StreamResp> initiateTwitterStreamer(WebClient webClient) {
 		LOGGER.info("Connection creating for streaming");
-		Flux<String> stream = webClient.get().uri("/stream?tweet.fields=created_at").retrieve()
-				.bodyToFlux(String.class).share().retry();
+		Flux<String> stream = webClient.get().uri("/stream?tweet.fields=created_at").retrieve().bodyToFlux(String.class)
+				.share().retry();
 
 		Gson g = new Gson();
-		return stream.filter(tweet -> !tweet.isEmpty()).flatMap(tweet -> Flux.just(g.fromJson(tweet, StreamResp.class)))
-				.log("Tweet Input Stream");
+		return stream.flatMap(tweet -> {
+			if (tweet.isEmpty())
+				return Flux.just(new StreamResp());
+			else
+				return Flux.just(g.fromJson(tweet, StreamResp.class));
+		}).log("Tweet Input Stream");
 	}
 
 	@Bean("Filters")
