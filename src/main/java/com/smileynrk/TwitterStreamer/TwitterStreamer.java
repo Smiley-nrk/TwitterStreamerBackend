@@ -1,5 +1,7 @@
 package com.smileynrk.TwitterStreamer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,8 @@ import reactor.core.publisher.Mono;
 
 @Configuration
 public class TwitterStreamer {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterStreamer.class);
 
 	@Autowired
 	Environment env;
@@ -28,7 +32,7 @@ public class TwitterStreamer {
 
 	@Bean("TweetStream")
 	Flux<StreamResp> initiateTwitterStreamer(WebClient webClient) {
-		System.out.println("Connection creating for streaming");
+		LOGGER.info("Connection creating for streaming");
 		Flux<String> stream = webClient.get().uri("/stream?tweet.fields=created_at").retrieve()
 				.bodyToFlux(String.class).share().retry();
 
