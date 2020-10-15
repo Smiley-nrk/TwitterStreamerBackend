@@ -1,4 +1,4 @@
-package com.smileynrk.TwitterStreamer.controller;
+package com.smileynrk.twitterstreamer.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smileynrk.TwitterStreamer.dto.Rules;
-import com.smileynrk.TwitterStreamer.dto.StreamResp;
-import com.smileynrk.TwitterStreamer.repository.TweetsRepo;
-import com.smileynrk.TwitterStreamer.service.RuleManagerService;
+import com.smileynrk.twitterstreamer.dto.Rules;
+import com.smileynrk.twitterstreamer.dto.StreamResp;
+import com.smileynrk.twitterstreamer.repository.TweetsRepo;
+import com.smileynrk.twitterstreamer.service.RuleManagerService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,7 +41,7 @@ public class StreamController {
 
 	@GetMapping(value = "/getTweets", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	@CrossOrigin(origins ="https://twitterstreamapplication.herokuapp.com")
-	Flux<String> getTweets() {
+	public Flux<String> getTweets() {
 		LOGGER.info("New Req for Streaming");
 		return twRepo.saveAll(tStream).map(tweet -> {
 			try {
@@ -53,8 +53,9 @@ public class StreamController {
 	}
 
 	@GetMapping(value = "/getFilters")
-	Mono<String> getFilters() {
+	public Mono<String> getFilters() {
 		LOGGER.info("New Req for Rules");
+		
 		return filters.map(filter -> {
 			try {
 				return new ObjectMapper().writeValueAsString(filter);
@@ -65,18 +66,18 @@ public class StreamController {
 	}
 
 	@GetMapping(value = "/deleteFilter", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	Mono<String> deleteFilter(@RequestParam("id") String id) {
-		LOGGER.info("Request to delete filter with ID: " + id);
+	public Mono<String> deleteFilter(@RequestParam("id") String id) {
+		LOGGER.info("Request to delete filter with ID: "+id);
 		return rms.deleteRule(id);
 	}
 
 	@GetMapping(value = "/addFilter", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	Mono<String> addFilter(@RequestParam("tag") String tag, @RequestParam("author") String author) {
+	public Mono<String> addFilter(@RequestParam("tag") String tag, @RequestParam("author") String author) {
 		LOGGER.info("Request to add new Filter");
 		try {
 			return rms.addRule(author, tag);
 		} catch (Exception e) {
-			LOGGER.error("Exception while adding filter:" + e.getMessage());
+			LOGGER.error("Exception while adding filter: "+e.getMessage());
 			return Mono.just("false");
 		}
 	}

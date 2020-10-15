@@ -1,8 +1,10 @@
-package com.smileynrk.TwitterStreamer.dto;
+package com.smileynrk.twitterstreamer.dto;
 
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -10,13 +12,15 @@ import lombok.Data;
 @Document(collection = "tweet")
 public class StreamResp implements Comparable<StreamResp> {
 	StreamData data;
-	List<RuleData> matching_rules;
+	
+	@JsonProperty("matching_rules")
+	List<RuleData> matchingRules;
 	
 	
 	@Override
 	public int compareTo(StreamResp o) {
-		if(this.data != null && this.data.created_at != null && o.data != null && o.data.created_at != null)
-			return o.data.created_at.compareTo(this.data.created_at);
+		if(this.data != null && this.data.getCreatedAt() != null && o.data != null && o.data.getCreatedAt() != null)
+			return o.data.getCreatedAt().compareTo(this.data.getCreatedAt());
 		else
 			return 0;
 	}

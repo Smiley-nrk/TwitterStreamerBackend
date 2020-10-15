@@ -1,4 +1,4 @@
-package com.smileynrk.TwitterStreamer.dto;
+package com.smileynrk.twitterstreamer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

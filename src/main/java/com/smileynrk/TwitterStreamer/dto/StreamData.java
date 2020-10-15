@@ -1,6 +1,8 @@
-package com.smileynrk.TwitterStreamer.dto;
+package com.smileynrk.twitterstreamer.dto;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -8,5 +10,7 @@ import lombok.Data;
 public class StreamData {
 	String id;
 	String text;
-	Date created_at;
+	
+	@JsonProperty("created_at")
+	Date createdAt;
 }

@@ -1,11 +1,11 @@
-package com.smileynrk.TwitterStreamer.service;
+package com.smileynrk.twitterstreamer.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.smileynrk.TwitterStreamer.dto.DeleteRule;
+import com.smileynrk.twitterstreamer.dto.DeleteRule;
 
 import reactor.core.publisher.Mono;
 
@@ -24,26 +24,24 @@ public class RuleManagerService {
 		return response.map(res -> (res.getMeta().getSummary().getDeleted() == 1?"true":"false"));
 	}
 	
-	public Mono<String> addRule(String author,String tag) throws Exception {
-		String body = "";
+	public Mono<String> addRule(String author,String tag) {
+		String body = "\"}]}";
 		
 		if (author != null && !author.isEmpty() && tag != null && !tag.isEmpty()) {
-			body = "{\"add\": [{\"value\": \""+tag+" from:" + author + "\", \"tag\": \"b-" + author+":"+tag + "\"}]}";
+			body = "{\"add\": [{\"value\": \""+tag+" from:" + author + "\", \"tag\": \"b-" + author+":"+tag + body;
 		}		
 		else if (author != null && !author.isEmpty()) {
-			body = "{\"add\": [{\"value\": \"from:" + author + "\", \"tag\": \"a-" + author + "\"}]}";
+			body = "{\"add\": [{\"value\": \"from:" + author + "\", \"tag\": \"a-" + author + body;
 		}
 		else if (tag != null && !tag.isEmpty()) {
-			body = "{\"add\": [{\"value\": \"" + tag + "\", \"tag\": \"t-" + tag + "\"}]}";
+			body = "{\"add\": [{\"value\": \"" + tag + "\", \"tag\": \"t-" + tag + body;
 		}
 		else {
-			throw new Exception("Author and Tag both cannot be empty");
+			throw new IllegalArgumentException("Author and Tag both cannot be empty");
 		}
 		
-		Mono<String> response = webClient.post().uri("/stream/rules").contentType(MediaType.APPLICATION_JSON).bodyValue(body)
+		return webClient.post().uri("/stream/rules").contentType(MediaType.APPLICATION_JSON).bodyValue(body)
 				.retrieve().bodyToMono(String.class).log("Add Rule Stream");
 
-		
-		return response;
 	}
 }

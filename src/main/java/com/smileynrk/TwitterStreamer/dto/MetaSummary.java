@@ -1,4 +1,6 @@
-package com.smileynrk.TwitterStreamer.dto;
+package com.smileynrk.twitterstreamer.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MetaSummary {
 	int created;
-	int not_created;
+	
+	@JsonProperty("not_created")
+	int notCreated;
+	
 	int deleted;
-	int not_deleted;
+	
+	@JsonProperty("not_deleted")
+	int notDeleted;
 }

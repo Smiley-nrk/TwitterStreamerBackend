@@ -1,16 +1,15 @@
-package com.smileynrk.TwitterStreamer;
+package com.smileynrk.twitterstreamer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.google.gson.Gson;
-import com.smileynrk.TwitterStreamer.dto.Rules;
-import com.smileynrk.TwitterStreamer.dto.StreamResp;
+import com.smileynrk.twitterstreamer.dto.Rules;
+import com.smileynrk.twitterstreamer.dto.StreamResp;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,11 +19,9 @@ public class TwitterStreamer {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterStreamer.class);
 
-	@Autowired
-	Environment env;
 
 	@Bean
-	WebClient buildWebClient() {
+	WebClient buildWebClient(Environment env) {
 		String token = env.getProperty("bearerToken");
 		return WebClient.builder().baseUrl("https://api.twitter.com/2/tweets/search")
 				.defaultHeader("Authorization", "Bearer " + token).build();
@@ -46,12 +43,11 @@ public class TwitterStreamer {
 	}
 
 	@Bean("Filters")
-	Mono<Rules> retchFilters(WebClient webClient) {
+	Mono<Rules> fetchFilters(WebClient webClient) {
 
-		Mono<Rules> response = webClient.get().uri("/stream/rules").retrieve().bodyToMono(Rules.class)
+		return webClient.get().uri("/stream/rules").retrieve().bodyToMono(Rules.class)
 				.log("Rule Input Stream");
 
-		return response;
 	}
 
 }
