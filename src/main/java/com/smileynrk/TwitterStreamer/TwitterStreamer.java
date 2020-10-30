@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.smileynrk.twitterstreamer.dto.Rules;
 import com.smileynrk.twitterstreamer.dto.StreamResp;
 
@@ -33,7 +34,7 @@ public class TwitterStreamer {
 		Flux<String> stream = webClient.get().uri("/stream?tweet.fields=created_at").retrieve().bodyToFlux(String.class)
 				.share().retry();
 
-		Gson g = new Gson();
+		Gson g =  new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
 		return stream.flatMap(tweet -> {
 			if (tweet.isEmpty())
 				return Flux.just(new StreamResp());
