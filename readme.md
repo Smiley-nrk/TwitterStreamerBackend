@@ -21,7 +21,7 @@
 # How to communicate?
   ## 1)Fetch current filters:
       -url: localhost:8080/getFilters
-      ![Fetch Filters](/ss/getFilters.PNG?raw=true)
+  ![Fetch Filters](/ss/getFilters.PNG?raw=true)
       
       -Notice that:
         1.Author filter is of format 'from:**' in value and 'a-**' in tag
@@ -29,10 +29,15 @@
         3.Filters having both values configured are of format '** from:*' in value and 'b-*:**' in tag
         
   ## 2)Add new filter:
+      
+      -url: localhost:8080/addFilter?author=**
+  ![add author filter](/ss/addFilter-Author.PNG?raw=true)
+  
+      -url: localhost:8080/addFilter?tag=**
+  ![add tag filter](/ss/addFilter-Tag.PNG?raw=true)
+      
       -url: localhost:8080/addFilter?author=**&tag=**
-      ![add author filter]()
-      ![add tag filter]()
-      ![add author and tag filter]()
+  ![add author and tag filter](/ss/addFilter-Author%20and%20Tag.PNG?raw=true)
       
       -Notice that:
         1.On successful creation of filter, the response will have an id, "created":"1" and "not_created":"0"
@@ -40,7 +45,7 @@
         
   ## 3)Stream tweets:
       -url: localhost:8080?getTweets
-      ![stream tweets]()
+  ![Streaming](/ss/Streaming.gif)
       
       -Notice that:
         1.In "matchingRules", you can see the filter tag which fetched the tweet.
@@ -48,7 +53,7 @@
         
   ## 4)Delete filter:
       -url: localhost:8080?deleteFilter?id=**
-      ![delete filter]()
+  ![delete filter](/ss/deleteFilter.PNG?raw=true)
   
 
 # Want to use YOUR MongoDB instead of the embedded one?
