@@ -12,7 +12,7 @@ public class DBCleanerService {
 	@Autowired
 	TweetsRepo twRepo;
 	
-	@Scheduled(cron = "0 40 23 1/1 * ? *")
+	@Scheduled(cron = "0 50 23 ? * *")
 //	@Scheduled(fixedRate = 1000)
 	   public void cronJobSch() {
 	      twRepo.deleteAll().block();
