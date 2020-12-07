@@ -65,13 +65,13 @@ public class StreamController {
 		});
 	}
 
-	@GetMapping(value = "/deleteFilter", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	@GetMapping(value = "/deleteFilter")
 	public Mono<String> deleteFilter(@RequestParam("id") String id) {
 		LOGGER.info("Request to delete filter with ID: "+id);
 		return rms.deleteRule(id);
 	}
 
-	@GetMapping(value = "/addFilter", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	@GetMapping(value = "/addFilter")
 	public Mono<String> addFilter(@RequestParam("tag") String tag, @RequestParam("author") String author) {
 		LOGGER.info("Request to add new Filter");
 		try {

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.smileynrk.twitterstreamer.dto.DeleteRule;
+import com.smileynrk.twitterstreamer.dto.Rules;
 
 import reactor.core.publisher.Mono;
 
@@ -41,7 +42,7 @@ public class RuleManagerService {
 		}
 		
 		return webClient.post().uri("/stream/rules").contentType(MediaType.APPLICATION_JSON).bodyValue(body)
-				.retrieve().bodyToMono(String.class).log("Add Rule Stream");
+				.retrieve().bodyToMono(Rules.class).log("Add Rule Stream").map((res) -> {return (res.getMeta().getSummary().getCreated() == 1)+"";});
 
 	}
 }
